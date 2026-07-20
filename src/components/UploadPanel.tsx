@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Search, UploadCloud, User, Building2, Loader2 } from "lucide-react";
 import { SearchService } from "@/services/search.service";
+import { useToast } from "@/components/ToastProvider";
+import { translateError } from "@/services/error-translator";
 
 interface UploadPanelProps {
   onUploadSuccess: (batchId: string) => void;
@@ -11,7 +13,7 @@ interface UploadPanelProps {
 export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
   const [activeTab, setActiveTab] = useState<'single' | 'batch'>('single');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const { addToast } = useToast();
   
   // Single search
   const [name, setName] = useState('');
@@ -25,19 +27,17 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
     if (!name.trim()) return;
     
     setIsLoading(true);
-    setError('');
     
     try {
       const result = await SearchService.searchSingle({
         targetName: name,
         ...(institution.trim() && { targetInstitution: institution.trim() }),
       });
-      // Assuming backend creates a batch for single search or we adapt UI to just take the batchId
       if (result.batchId) {
         onUploadSuccess(result.batchId);
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Erro ao realizar busca individual.');
+    } catch (err) {
+      addToast(translateError(err, "Não foi possível realizar a busca. Tente novamente."));
     } finally {
       setIsLoading(false);
     }
@@ -48,14 +48,12 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
     if (!file) return;
     
     setIsLoading(true);
-    setError('');
     
     try {
-      const userId = 'user-temp-id'; 
-      const batch = await SearchService.uploadBatch(file, userId);
+      const batch = await SearchService.uploadBatch(file);
       onUploadSuccess(batch.id);
-    } catch (err: any) {
-      setError(err.response?.data?.message || err.message || 'Erro ao enviar lote.');
+    } catch (err) {
+      addToast(translateError(err, "Não foi possível processar a planilha. Verifique o arquivo e tente novamente."));
     } finally {
       setIsLoading(false);
     }
@@ -89,12 +87,6 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
       </div>
 
       <div className="p-6">
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-lg text-sm border border-red-100 dark:border-red-900/50 flex items-center gap-2">
-            <span className="font-semibold">Erro:</span> {error}
-          </div>
-        )}
-
         {activeTab === 'single' && (
           <form onSubmit={handleSingleSearch} className="space-y-4">
             <div>

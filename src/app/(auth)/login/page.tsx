@@ -5,18 +5,19 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthService } from "@/services/auth.service";
 import { Loader2, Mail, Lock } from "lucide-react";
+import { useToast } from "@/components/ToastProvider";
+import { translateError } from "@/services/error-translator";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { addToast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
 
     try {
       const response = await AuthService.loginUser({ email, password });
@@ -28,8 +29,8 @@ export default function LoginPage() {
       } else {
         throw new Error("Token não retornado pelo servidor.");
       }
-    } catch (err: any) {
-      setError(err.response?.data?.message || err.message || "Erro ao realizar login. Verifique suas credenciais.");
+    } catch (err) {
+      addToast(translateError(err, "Não foi possível realizar o login. Verifique suas credenciais e tente novamente."));
     } finally {
       setIsLoading(false);
     }
@@ -45,12 +46,6 @@ export default function LoginPage() {
           Faça login para acessar o buscador ORCID
         </p>
       </div>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-lg text-sm border border-red-100 dark:border-red-900/50">
-          {error}
-        </div>
-      )}
 
       <form onSubmit={handleLogin} className="space-y-6">
         <div>

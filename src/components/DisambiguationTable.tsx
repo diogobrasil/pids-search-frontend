@@ -4,6 +4,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import { SearchService } from "@/services/search.service";
 import { StudentQuery } from "@/types/orcid";
 import { ChevronDown, ChevronRight, CheckCircle2, Loader2, UserCheck, ExternalLink } from "lucide-react";
+import { useToast } from "@/components/ToastProvider";
+import { translateError } from "@/services/error-translator";
 
 interface DisambiguationTableProps {
   batchId: string;
@@ -14,6 +16,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
   const [queries, setQueries] = useState<StudentQuery[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const { addToast } = useToast();
 
   const fetchResults = useCallback(async () => {
     try {
@@ -63,10 +66,12 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
       const newExpanded = new Set(expandedRows);
       newExpanded.delete(queryId);
       setExpandedRows(newExpanded);
+
+      addToast("Perfil ORCID confirmado com sucesso!", "success");
       
     } catch (error) {
       console.error("Erro ao confirmar ORCID:", error);
-      alert("Falha ao confirmar o perfil. Tente novamente.");
+      addToast(translateError(error, "Não foi possível confirmar o perfil. Tente novamente."));
     }
   };
 
