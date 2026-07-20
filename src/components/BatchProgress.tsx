@@ -38,9 +38,9 @@ export function BatchProgress({ batchId, onComplete }: BatchProgressProps) {
 
   if (!batch) {
     return (
-      <div className="bg-surface rounded-lg shadow-sm border border-slate-200 p-6 flex items-center justify-center gap-3">
-        <Loader2 className="w-5 h-5 animate-spin text-primary" />
-        <span className="text-text-secondary font-medium">Iniciando processamento...</span>
+      <div className="bg-surface dark:bg-dark-surface rounded-lg shadow-sm border border-slate-200 dark:border-dark-border p-6 flex items-center justify-center gap-3 transition-colors duration-300">
+        <Loader2 className="w-5 h-5 animate-spin text-primary dark:text-dark-primary" />
+        <span className="text-text-secondary dark:text-dark-text-secondary font-medium">Iniciando processamento...</span>
       </div>
     );
   }
@@ -50,25 +50,25 @@ export function BatchProgress({ batchId, onComplete }: BatchProgressProps) {
     : 0;
 
   return (
-    <div className="bg-surface rounded-lg shadow-sm border border-slate-200 p-6">
+    <div className="bg-surface dark:bg-dark-surface rounded-lg shadow-sm border border-slate-200 dark:border-dark-border p-6 transition-colors duration-300">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Loader2 className="w-5 h-5 animate-spin text-primary" />
-          <h3 className="font-medium text-text-main">Processando Lote</h3>
+          <Loader2 className="w-5 h-5 animate-spin text-primary dark:text-dark-primary" />
+          <h3 className="font-medium text-text-main dark:text-dark-text-main">Processando Lote</h3>
         </div>
-        <span className="text-sm font-semibold text-text-secondary">
+        <span className="text-sm font-semibold text-text-secondary dark:text-dark-text-secondary">
           {percentage}%
         </span>
       </div>
 
-      <div className="w-full bg-slate-100 rounded-full h-3 mb-3 overflow-hidden border border-slate-200">
+      <div className="w-full bg-slate-100 dark:bg-dark-surface-raised rounded-full h-3 mb-3 overflow-hidden border border-slate-200 dark:border-dark-border">
         <div 
-          className="h-full rounded-full bg-primary transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-primary dark:bg-dark-primary transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         ></div>
       </div>
       
-      <p className="text-sm text-text-secondary text-center">
+      <p className="text-sm text-text-secondary dark:text-dark-text-secondary text-center">
         Processando {batch.processedRecords} de {batch.totalRecords} registros
       </p>
     </div>

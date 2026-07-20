@@ -27,14 +27,14 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-serif font-bold text-text-main">
+        <h2 className="text-2xl font-serif font-bold text-text-main dark:text-dark-text-main">
           Buscador ORCID
         </h2>
         
         {activeBatchId && (
           <button 
             onClick={handleReset}
-            className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm"
+            className="flex items-center gap-2 text-sm font-medium text-text-secondary dark:text-dark-text-secondary hover:text-primary dark:hover:text-dark-primary transition-colors bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border px-4 py-2 rounded-lg shadow-sm"
           >
             <RefreshCcw className="w-4 h-4" />
             Nova Busca

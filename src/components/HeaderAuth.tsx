@@ -38,7 +38,7 @@ export function HeaderAuth() {
     return (
       <button 
         onClick={handleLogout}
-        className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white transition-colors px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 ml-auto"
+        className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white transition-colors px-3 py-1.5 rounded bg-white/10 hover:bg-white/20"
       >
         <LogOut className="w-4 h-4" />
         Sair
@@ -49,20 +49,20 @@ export function HeaderAuth() {
   // Se estiver nas rotas de auth, podemos exibir apenas link p/ a Home
   if (pathname === '/login' || pathname === '/register') {
     return (
-      <Link href="/" className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white ml-auto">
+      <Link href="/" className="flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white">
         Ir para o Início
       </Link>
     );
   }
 
   return (
-    <div className="flex items-center gap-3 ml-auto">
+    <div className="flex items-center gap-3">
       <Link href="/login" className="text-sm font-medium text-white/90 hover:text-white">
         Entrar
       </Link>
       <Link 
         href="/register" 
-        className="text-sm font-medium bg-white text-primary hover:bg-slate-50 transition-colors px-4 py-1.5 rounded-full"
+        className="text-sm font-medium bg-white text-primary hover:bg-slate-50 transition-colors px-4 py-1.5 rounded-full dark:bg-dark-primary dark:text-dark-background dark:hover:bg-dark-primary-hover"
       >
         Criar Conta
       </Link>
