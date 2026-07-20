@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, UploadCloud, User, Loader2 } from "lucide-react";
+import { Search, UploadCloud, User, Building2, Loader2 } from "lucide-react";
 import { SearchService } from "@/services/search.service";
 
 interface UploadPanelProps {
@@ -15,6 +15,7 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
   
   // Single search
   const [name, setName] = useState('');
+  const [institution, setInstitution] = useState('');
   
   // Batch upload
   const [file, setFile] = useState<File | null>(null);
@@ -28,7 +29,8 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
     
     try {
       const result = await SearchService.searchSingle({
-        targetName: name
+        targetName: name,
+        ...(institution.trim() && { targetInstitution: institution.trim() }),
       });
       // Assuming backend creates a batch for single search or we adapt UI to just take the batchId
       if (result.batchId) {
@@ -100,6 +102,7 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
+                  id="search-name"
                   type="text"
                   required
                   value={name}
@@ -108,6 +111,24 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
                   placeholder="Ex: João Silva Costa"
                 />
               </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-text-main mb-1">
+                Instituição
+                <span className="ml-1 text-xs font-normal text-slate-400">(opcional)</span>
+              </label>
+              <div className="relative">
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  id="search-institution"
+                  type="text"
+                  value={institution}
+                  onChange={(e) => setInstitution(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all text-text-main placeholder:text-slate-400"
+                  placeholder="Ex: Universidade Federal do Rio de Janeiro"
+                />
+              </div>
+              <p className="mt-1 text-xs text-slate-400">Preencher a instituição ajuda a refinar e acelerar a busca.</p>
             </div>
             <div className="pt-2">
               <button
