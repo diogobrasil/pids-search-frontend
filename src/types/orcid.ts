@@ -31,4 +31,7 @@ export interface OrcidCandidate {
   matchScore: number;
   isApproved: boolean;
   createdAt: string;
+  scopusId?: string;
+  researcherId?: string;
+  lattesId?: string;
 }

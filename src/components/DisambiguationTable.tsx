@@ -115,6 +115,12 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
               
               const sortedCandidates = [...(query.candidates || [])].sort((a, b) => b.matchScore - a.matchScore);
 
+              const isResolved = query.status === 'RESOLVED' || query.status === 'FOUND_SINGLE' || !!query.selectedOrcidId;
+              const resolvedCandidate = isResolved && hasCandidates
+                ? (query.candidates!.find(c => c.orcidIdentifier === query.selectedOrcidId) || (query.candidates!.length === 1 ? query.candidates![0] : null))
+                : null;
+              const hasResolvedExtras = resolvedCandidate && (resolvedCandidate.scopusId || resolvedCandidate.researcherId || resolvedCandidate.lattesId);
+
               return (
                 <React.Fragment key={query.id}>
                   <tr 
@@ -136,20 +142,62 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                       {query.targetInstitution || '-'}
                     </td>
                     <td className="px-6 py-4">
-                      {query.selectedOrcidId ? (
-                        <a 
-                          href={`https://orcid.org/${query.selectedOrcidId}`} 
-                          target="_blank" 
-                          rel="noreferrer" 
-                          onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-dark-surface-raised text-slate-700 dark:text-dark-text-main hover:bg-slate-200 dark:hover:bg-dark-border transition-colors border border-slate-200 dark:border-dark-border"
-                        >
-                          <img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" alt="ORCID iD" className="w-3.5 h-3.5" />
-                          {query.selectedOrcidId}
-                        </a>
-                      ) : (
-                        <span className="text-slate-400 dark:text-slate-500 text-xs">-</span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {query.selectedOrcidId ? (
+                          <a 
+                            href={`https://orcid.org/${query.selectedOrcidId}`} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            onClick={(e) => e.stopPropagation()}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 dark:bg-dark-surface-raised text-slate-700 dark:text-dark-text-main hover:bg-slate-200 dark:hover:bg-dark-border transition-colors border border-slate-200 dark:border-dark-border"
+                          >
+                            <img src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" alt="ORCID iD" className="w-3.5 h-3.5" />
+                            {query.selectedOrcidId}
+                          </a>
+                        ) : (
+                          <span className="text-slate-400 dark:text-slate-500 text-xs">-</span>
+                        )}
+                        {hasResolvedExtras && (
+                          <>
+                            {resolvedCandidate.scopusId && (
+                              <a
+                                href={`https://www.scopus.com/authid/detail.uri?authorId=${resolvedCandidate.scopusId}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200 dark:bg-orange-950/40 dark:text-orange-400 dark:border-orange-800/50 hover:bg-orange-200 dark:hover:bg-orange-900/50 transition-colors"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                                Scopus: {resolvedCandidate.scopusId}
+                              </a>
+                            )}
+                            {resolvedCandidate.researcherId && (
+                              <a
+                                href={`https://www.webofscience.com/wos/author/record/${resolvedCandidate.researcherId}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800/50 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                                ResearcherID: {resolvedCandidate.researcherId}
+                              </a>
+                            )}
+                            {resolvedCandidate.lattesId && (
+                              <a
+                                href={`http://lattes.cnpq.br/${resolvedCandidate.lattesId}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                                Lattes: {resolvedCandidate.lattesId}
+                              </a>
+                            )}
+                          </>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex px-2 py-1 rounded text-xs font-medium ${
@@ -186,6 +234,46 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                       <span>• {candidate.affiliations}</span>
                                     )}
                                   </div>
+                                  {(candidate.scopusId || candidate.researcherId || candidate.lattesId) && (
+                                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                                      {candidate.scopusId && (
+                                        <a
+                                          href={`https://www.scopus.com/authid/detail.uri?authorId=${candidate.scopusId}`}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200 dark:bg-orange-950/40 dark:text-orange-400 dark:border-orange-800/50 hover:bg-orange-200 dark:hover:bg-orange-900/50 transition-colors"
+                                        >
+                                          <ExternalLink className="w-3 h-3" />
+                                          Scopus: {candidate.scopusId}
+                                        </a>
+                                      )}
+                                      {candidate.researcherId && (
+                                        <a
+                                          href={`https://www.webofscience.com/wos/author/record/${candidate.researcherId}`}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800/50 hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors"
+                                        >
+                                          <ExternalLink className="w-3 h-3" />
+                                          ResearcherID: {candidate.researcherId}
+                                        </a>
+                                      )}
+                                      {candidate.lattesId && (
+                                        <a
+                                          href={`http://lattes.cnpq.br/${candidate.lattesId}`}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors"
+                                        >
+                                          <ExternalLink className="w-3 h-3" />
+                                          Lattes: {candidate.lattesId}
+                                        </a>
+                                      )}
+                                    </div>
+                                  )}
                                 </div>
                                 <button
                                   onClick={(e) => {
