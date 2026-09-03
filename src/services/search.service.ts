@@ -75,4 +75,9 @@ export const SearchService = {
     const response = await api.patch(`/search/query/${queryId}/confirm`, { selectedOrcidId: orcidId });
     return response.data.data || response.data;
   },
+
+  async scrapeLattes(queryId: string, candidateId: string): Promise<any> {
+    const response = await api.post(`/search/candidate/${candidateId}/scrape-lattes`);
+    return response.data.candidate;
+  },
 };

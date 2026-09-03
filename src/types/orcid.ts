@@ -19,19 +19,21 @@ export interface StudentQuery {
   selectedOrcidId: string | null;
   createdAt: string;
   updatedAt: string;
-  candidates?: OrcidCandidate[];
+  candidates?: ResearcherCandidate[];
 }
 
-export interface OrcidCandidate {
+export interface ResearcherCandidate {
   id: string;
   studentQueryId: string;
-  orcidIdentifier: string;
+  orcidIdentifier: string | null;
   returnedName: string;
   affiliations: string | null;
+  scopusId: string | null;
+  researcherId: string | null;
+  lattesId: string | null;
+  lattesAmbiguous: boolean;
+  openAlexId: string | null;
   matchScore: number;
   isApproved: boolean;
   createdAt: string;
-  scopusId?: string;
-  researcherId?: string;
-  lattesId?: string;
 }
