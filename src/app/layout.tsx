@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
-import { Inter, Merriweather } from "next/font/google";
-import { BookOpen } from "lucide-react";
+import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
+import Image from "next/image";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ToastProvider } from "@/components/ToastProvider";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const merriweather = Merriweather({
-  variable: "--font-merriweather",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Buscador ORCID - UFMA",
-  description: "Buscador de identificadores ORCID Institucional",
+  title: "BIP - Buscador de Identificadores Persistentes",
+  description: "Buscador de Identificadores Persistentes — UFMA",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -47,15 +51,21 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.className} ${merriweather.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
+        className={`${dmSans.className} ${plusJakarta.variable} ${dmSans.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
       >
         <ThemeProvider>
           <ToastProvider>
             <header className="bg-primary dark:bg-dark-surface text-white shadow-md sticky top-0 z-50 transition-colors duration-300 dark:border-b dark:border-dark-border">
               <div className="container mx-auto px-4 h-16 flex items-center gap-3">
-                <BookOpen className="w-6 h-6 text-white/90" />
-                <h1 className="font-serif text-xl font-bold tracking-wide">
-                  Buscador ORCID Institucional
+                <Image
+                  src="/logo.jpg"
+                  alt="Logo BIP"
+                  width={36}
+                  height={36}
+                  className="rounded-md"
+                />
+                <h1 className="font-heading text-xl font-bold tracking-wide">
+                  Buscador de Identificadores Persistentes
                 </h1>
                 <div className="ml-auto flex items-center gap-3">
                   <ThemeToggle />
@@ -78,4 +88,3 @@ export default function RootLayout({
     </html>
   );
 }
-

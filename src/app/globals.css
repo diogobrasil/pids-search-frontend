@@ -20,8 +20,8 @@
   --color-dark-border: #334155;
   --color-dark-border-subtle: #1E293B;
 
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-merriweather);
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-plus-jakarta);
 }
 
 @layer base {

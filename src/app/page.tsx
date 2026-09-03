@@ -27,8 +27,8 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl font-serif font-bold text-text-main dark:text-dark-text-main">
-          Buscador ORCID
+        <h2 className="text-2xl font-heading font-bold text-text-main dark:text-dark-text-main">
+          Buscador de Identificadores Persistentes
         </h2>
         
         {activeBatchId && (
