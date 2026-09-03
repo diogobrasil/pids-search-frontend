@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import { BookOpen } from "lucide-react";
-import { HeaderAuth } from "@/components/HeaderAuth";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ToastProvider } from "@/components/ToastProvider";
@@ -60,7 +59,6 @@ export default function RootLayout({
                 </h1>
                 <div className="ml-auto flex items-center gap-3">
                   <ThemeToggle />
-                  <HeaderAuth />
                 </div>
               </div>
             </header>
@@ -80,3 +78,4 @@ export default function RootLayout({
     </html>
   );
 }
+

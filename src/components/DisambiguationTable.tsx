@@ -214,7 +214,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
 
                   {isExpanded && canExpand && (
                     <tr>
-                      <td colSpan={4} className="p-0 border-b border-slate-200 dark:border-dark-border">
+                      <td colSpan={5} className="p-0 border-b border-slate-200 dark:border-dark-border">
                         <div className="bg-slate-50 dark:bg-dark-background p-6 shadow-inner">
                           <div className="space-y-3">
                             {sortedCandidates.map((candidate) => (
@@ -298,7 +298,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
             
             {queries.length === 0 && !isProcessing && (
               <tr>
-                <td colSpan={4} className="px-6 py-8 text-center text-text-secondary dark:text-dark-text-secondary">
+                <td colSpan={5} className="px-6 py-8 text-center text-text-secondary dark:text-dark-text-secondary">
                   Nenhum registro encontrado.
                 </td>
               </tr>
