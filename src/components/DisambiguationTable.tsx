@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { SearchService } from "@/services/search.service";
-import type { BatchStatus, StudentQuery, ResearcherCandidate } from "@/types/orcid";
+import type { StudentQuery, ResearcherCandidate } from "@/types/orcid";
 import { ChevronDown, ChevronRight, CheckCircle2, Loader2, UserCheck, ExternalLink } from "lucide-react";
 import { useToast } from "@/components/ToastProvider";
 import { translateError } from "@/services/error-translator";
@@ -89,7 +89,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
     try {
       await SearchService.scrapeLattes(queryId, candidateId);
       addToast('Lattes extraído com sucesso!', 'success');
-      onRefresh(); // Atualiza a tabela
+      fetchResults(); // Atualiza a tabela
     } catch (error: any) {
       console.error('Erro no Lattes:', error);
       addToast(error.response?.data?.message || 'Falha ao buscar no Lattes', 'error');
