@@ -284,10 +284,26 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                         ResearcherID: {c.researcherId}
                                       </a>
                                     )}
-                                    {c.lattesId && (
+                                    {c.lattesId ? (
                                       <a href={getLattesUrl(c.lattesId)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors">
                                         Lattes: {c.lattesId}
                                       </a>
+                                    ) : (
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          handleScrapeLattes(query.id, c.id);
+                                        }}
+                                        disabled={scrapingLattes[c.id]}
+                                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-700 border border-slate-300 dark:bg-dark-surface dark:text-dark-text-main dark:border-dark-border hover:bg-slate-200 dark:hover:bg-dark-border disabled:opacity-50 transition-colors"
+                                      >
+                                        {scrapingLattes[c.id] ? (
+                                          <Loader2 className="w-2.5 h-2.5 animate-spin" />
+                                        ) : (
+                                          <ExternalLink className="w-2.5 h-2.5" />
+                                        )}
+                                        Buscar Lattes
+                                      </button>
                                     )}
                                     {c.openAlexId && (
                                       <a href={`https://openalex.org/${c.openAlexId}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-800/50 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors">
