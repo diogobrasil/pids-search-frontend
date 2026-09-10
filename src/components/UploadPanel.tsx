@@ -5,6 +5,7 @@ import { Search, UploadCloud, User, Building2, Loader2, HelpCircle, X, FileSprea
 import { SearchService } from "@/services/search.service";
 import { useToast } from "@/components/ToastProvider";
 import { translateError } from "@/services/error-translator";
+import { COMMON_INSTITUTIONS } from "@/constants/institutions";
 
 interface UploadPanelProps {
   onUploadSuccess: (batchId: string) => void;
@@ -119,7 +120,13 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
                   onChange={(e) => setInstitution(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-dark-border focus:ring-2 focus:ring-primary/20 dark:focus:ring-dark-primary/30 focus:border-primary dark:focus:border-dark-primary outline-none transition-all text-text-main dark:text-dark-text-main placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-dark-surface-raised"
                   placeholder="Ex: Universidade Federal do Rio de Janeiro"
+                  list="institutions-list"
                 />
+                <datalist id="institutions-list">
+                  {COMMON_INSTITUTIONS.map((inst) => (
+                    <option key={inst} value={inst} />
+                  ))}
+                </datalist>
               </div>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Preencher a instituição ajuda a refinar e acelerar a busca.</p>
             </div>

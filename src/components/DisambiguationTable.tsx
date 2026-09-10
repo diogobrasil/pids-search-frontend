@@ -39,6 +39,25 @@ const getLattesUrl = (lattesId: string) => {
     : `http://lattes.cnpq.br/${lattesId}`;
 };
 
+const isLikelyBrazilian = (candidate: ResearcherCandidate, query: StudentQuery) => {
+  const textToAnalyze = `${candidate.affiliations || ''} ${query.targetInstitution || ''}`.toLowerCase();
+  
+  // Se não tem texto nenhum, assumimos brasileiro como padrão para não perder a chance
+  if (!textToAnalyze.trim()) return true;
+
+  const brKeywords = ['brasil', 'brazil', 'universidade', 'instituto federal', 'estadual', 'usp', 'ufrj', 'ufmg', 'unicamp', 'puc', 'fiocruz', 'cnpq', 'capes'];
+  const foreignKeywords = ['usa', 'united states', 'uk', 'united kingdom', 'university of', 'institute of technology', 'college', 'school of', 'france', 'germany', 'australia', 'canada'];
+
+  // Verifica se tem palavra-chave BR clara
+  if (brKeywords.some(kw => textToAnalyze.includes(kw))) return true;
+  
+  // Verifica se tem palavra-chave estrangeira clara sem palavra brasileira
+  if (foreignKeywords.some(kw => textToAnalyze.includes(kw))) return false;
+
+  // Em caso de dúvida, mantemos habilitado
+  return true;
+};
+
 export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTableProps) {
   const [queries, setQueries] = useState<StudentQuery[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -125,7 +144,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
     }
   };
 
-  const renderExternalIds = (candidate: ResearcherCandidate, queryId: string) => (
+  const renderExternalIds = (candidate: ResearcherCandidate, query: StudentQuery) => (
     <div className="mt-2 flex flex-col gap-2">
       <div className="flex flex-wrap items-center gap-2">
       {candidate.scopusId && (
@@ -163,11 +182,11 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
             <ExternalLink className="w-3 h-3" />
             Lattes: {candidate.lattesId}
           </a>
-        ) : (
+        ) : isLikelyBrazilian(candidate, query) ? (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleScrapeLattes(queryId, candidate.id);
+              handleScrapeLattes(query.id, candidate.id);
             }}
             disabled={scrapingLattes[candidate.id]}
             className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-300 dark:bg-dark-surface dark:text-dark-text-main dark:border-dark-border hover:bg-slate-200 dark:hover:bg-dark-border disabled:opacity-50 transition-colors"
@@ -179,7 +198,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
             )}
             Buscar Lattes
           </button>
-        )}
+        ) : null}
       {candidate.openAlexId && (
         <a
           href={`https://openalex.org/${candidate.openAlexId}`}
@@ -288,7 +307,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                       <a href={getLattesUrl(c.lattesId)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors">
                                         Lattes: {c.lattesId}
                                       </a>
-                                    ) : (
+                                    ) : isLikelyBrazilian(c, query) ? (
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
@@ -304,7 +323,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                         )}
                                         Buscar Lattes
                                       </button>
-                                    )}
+                                    ) : null}
                                     {c.openAlexId && (
                                       <a href={`https://openalex.org/${c.openAlexId}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-purple-100 text-purple-700 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-400 dark:border-purple-800/50 hover:bg-purple-200 dark:hover:bg-purple-900/50 transition-colors">
                                         OpenAlex: {c.openAlexId}
@@ -347,7 +366,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                       <span>• {candidate.affiliations}</span>
                                     )}
                                   </div>
-                                  {renderExternalIds(candidate, query.id)}
+                                  {renderExternalIds(candidate, query)}
                                 </div>
                                 <button
                                   onClick={(e) => {
