@@ -28,6 +28,7 @@ export interface ResearcherCandidate {
   orcidIdentifier: string | null;
   returnedName: string;
   affiliations: string | null;
+  country: string | null;
   scopusId: string | null;
   researcherId: string | null;
   lattesId: string | null;

@@ -40,6 +40,12 @@ const getLattesUrl = (lattesId: string) => {
 };
 
 const isLikelyBrazilian = (candidate: ResearcherCandidate, query: StudentQuery) => {
+  // 1. Se o ORCID retornou o país explicitamente
+  if (candidate.country) {
+    return candidate.country.toUpperCase() === 'BR';
+  }
+
+  // 2. Se não retornou o país, aplicamos a heurística nas strings
   const textToAnalyze = `${candidate.affiliations || ''} ${query.targetInstitution || ''}`.toLowerCase();
   
   // Se não tem texto nenhum, assumimos brasileiro como padrão para não perder a chance
@@ -239,9 +245,9 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
           <thead className="bg-slate-50 dark:bg-dark-surface-raised border-b border-slate-200 dark:border-dark-border text-text-secondary dark:text-dark-text-secondary">
             <tr>
               <th className="px-6 py-3 font-medium w-10"></th>
-              <th className="px-6 py-3 font-medium">Nome do Aluno</th>
-              <th className="px-6 py-3 font-medium">Instituição Alvo</th>
-              <th className="px-6 py-3 font-medium">ORCID</th>
+              <th className="px-6 py-3 font-medium">Pesquisador</th>
+              <th className="px-6 py-3 font-medium">Instituição</th>
+              <th className="px-6 py-3 font-medium">Identificadores</th>
               <th className="px-6 py-3 font-medium">Status</th>
             </tr>
           </thead>

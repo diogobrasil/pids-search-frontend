@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Search, UploadCloud, User, Building2, Loader2, HelpCircle, X, FileSpreadsheet, Info } from "lucide-react";
 import { SearchService } from "@/services/search.service";
 import { useToast } from "@/components/ToastProvider";
@@ -20,9 +20,25 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
   // Single search
   const [name, setName] = useState('');
   const [institution, setInstitution] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   
   // Batch upload
   const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filteredInstitutions = COMMON_INSTITUTIONS.filter(inst =>
+    inst.toLowerCase().includes(institution.toLowerCase())
+  );
 
   const handleSingleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,22 +127,39 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
                 Instituição
                 <span className="ml-1 text-xs font-normal text-slate-400 dark:text-slate-500">(opcional)</span>
               </label>
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
                 <input
                   id="search-institution"
                   type="text"
                   value={institution}
-                  onChange={(e) => setInstitution(e.target.value)}
+                  onChange={(e) => {
+                    setInstitution(e.target.value);
+                    setShowDropdown(true);
+                  }}
+                  onFocus={() => setShowDropdown(true)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-dark-border focus:ring-2 focus:ring-primary/20 dark:focus:ring-dark-primary/30 focus:border-primary dark:focus:border-dark-primary outline-none transition-all text-text-main dark:text-dark-text-main placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-dark-surface-raised"
                   placeholder="Ex: Universidade Federal do Rio de Janeiro"
-                  list="institutions-list"
+                  autoComplete="off"
                 />
-                <datalist id="institutions-list">
-                  {COMMON_INSTITUTIONS.map((inst) => (
-                    <option key={inst} value={inst} />
-                  ))}
-                </datalist>
+                {showDropdown && filteredInstitutions.length > 0 && (
+                  <ul className="absolute z-10 w-full mt-1 max-h-60 overflow-y-auto bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-lg shadow-lg">
+                    {filteredInstitutions.map((inst) => (
+                      <li
+                        key={inst}
+                        className="px-4 py-2 text-sm text-text-main dark:text-dark-text-main hover:bg-slate-50 dark:hover:bg-dark-surface-raised cursor-pointer"
+                        onMouseDown={(e) => {
+                          // Prevent input blur before click registers
+                          e.preventDefault();
+                          setInstitution(inst);
+                          setShowDropdown(false);
+                        }}
+                      >
+                        {inst}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Preencher a instituição ajuda a refinar e acelerar a busca.</p>
             </div>
