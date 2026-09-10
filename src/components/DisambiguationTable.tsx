@@ -33,6 +33,12 @@ const StatusBadge = ({ status }: { status: StudentQuery['status'] }) => {
   );
 };
 
+const getLattesUrl = (lattesId: string) => {
+  return lattesId.length === 10 
+    ? `http://buscatextual.cnpq.br/buscatextual/visualizacv.do?id=${lattesId}`
+    : `http://lattes.cnpq.br/${lattesId}`;
+};
+
 export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTableProps) {
   const [queries, setQueries] = useState<StudentQuery[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -148,7 +154,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
       )}
         {candidate.lattesId ? (
           <a
-            href={`http://lattes.cnpq.br/${candidate.lattesId}`}
+            href={getLattesUrl(candidate.lattesId)}
             target="_blank"
             rel="noreferrer"
             onClick={(e) => e.stopPropagation()}
@@ -279,7 +285,7 @@ export function DisambiguationTable({ batchId, isProcessing }: DisambiguationTab
                                       </a>
                                     )}
                                     {c.lattesId && (
-                                      <a href={`http://lattes.cnpq.br/${c.lattesId}`} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors">
+                                      <a href={getLattesUrl(c.lattesId)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-teal-100 text-teal-700 border border-teal-200 dark:bg-teal-950/40 dark:text-teal-400 dark:border-teal-800/50 hover:bg-teal-200 dark:hover:bg-teal-900/50 transition-colors">
                                         Lattes: {c.lattesId}
                                       </a>
                                     )}
