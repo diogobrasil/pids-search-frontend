@@ -61,7 +61,22 @@ export default function RootLayout({
                 <h1 className="font-heading text-xl font-bold tracking-wide">
                   Buscador de Identificadores Persistentes
                 </h1>
-                <div className="ml-auto flex items-center gap-3">
+                <div className="ml-auto flex items-center gap-4">
+                  <Image
+                    src="/logo-ufma.png"
+                    alt="Logo UFMA"
+                    width={36}
+                    height={36}
+                    className="rounded-full object-contain"
+                  />
+                  <Image
+                    src="/logo-mestrado.png"
+                    alt="Logo Mestrado Acadêmico em Enfermagem - UFMA"
+                    width={36}
+                    height={36}
+                    className="rounded-full object-contain"
+                  />
+                  <div className="h-6 w-px bg-white/30 dark:bg-dark-border" />
                   <ThemeToggle />
                 </div>
               </div>
