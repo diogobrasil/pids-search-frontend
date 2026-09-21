@@ -78,8 +78,8 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
   };
 
   return (
-    <div className="bg-surface dark:bg-dark-surface rounded-lg shadow-sm border border-slate-200 dark:border-dark-border overflow-hidden transition-colors duration-300">
-      <div className="flex border-b border-slate-200 dark:border-dark-border">
+    <div className="bg-surface dark:bg-dark-surface rounded-lg shadow-sm border border-slate-200 dark:border-dark-border transition-colors duration-300">
+      <div className="flex border-b border-slate-200 dark:border-dark-border rounded-t-lg overflow-hidden">
         <button
           onClick={() => setActiveTab('single')}
           className={`flex-1 py-4 px-6 font-medium text-sm transition-colors flex items-center justify-center gap-2 ${
@@ -143,22 +143,42 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
                   autoComplete="off"
                 />
                 {showDropdown && filteredInstitutions.length > 0 && (
-                  <ul className="absolute z-10 w-full mt-1 max-h-60 overflow-y-auto bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-lg shadow-lg">
-                    {filteredInstitutions.map((inst) => (
-                      <li
-                        key={inst}
-                        className="px-4 py-2 text-sm text-text-main dark:text-dark-text-main hover:bg-slate-50 dark:hover:bg-dark-surface-raised cursor-pointer"
-                        onMouseDown={(e) => {
-                          // Prevent input blur before click registers
-                          e.preventDefault();
-                          setInstitution(inst);
-                          setShowDropdown(false);
-                        }}
-                      >
-                        {inst}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-dark-surface border border-slate-200 dark:border-dark-border rounded-lg shadow-lg overflow-hidden">
+                    <ul className="max-h-48 overflow-y-auto scroll-smooth divide-y divide-slate-100 dark:divide-dark-border/50">
+                      {filteredInstitutions.map((inst) => {
+                        const query = institution.toLowerCase();
+                        const idx = inst.toLowerCase().indexOf(query);
+                        return (
+                          <li
+                            key={inst}
+                            className="px-4 py-2.5 text-sm text-text-main dark:text-dark-text-main hover:bg-primary/5 dark:hover:bg-dark-primary/10 cursor-pointer transition-colors"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              setInstitution(inst);
+                              setShowDropdown(false);
+                            }}
+                          >
+                            {query && idx !== -1 ? (
+                              <>
+                                {inst.slice(0, idx)}
+                                <span className="font-semibold text-primary dark:text-dark-primary">
+                                  {inst.slice(idx, idx + query.length)}
+                                </span>
+                                {inst.slice(idx + query.length)}
+                              </>
+                            ) : (
+                              inst
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                    {filteredInstitutions.length > 6 && (
+                      <div className="px-4 py-1.5 text-[11px] text-slate-400 dark:text-slate-500 bg-slate-50 dark:bg-dark-surface-raised border-t border-slate-200 dark:border-dark-border text-center">
+                        Role para ver mais • {filteredInstitutions.length} instituições
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Preencher a instituição ajuda a refinar e acelerar a busca.</p>

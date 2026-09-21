@@ -5,6 +5,7 @@ export const COMMON_INSTITUTIONS = [
   "Universidade Estadual Paulista",
   "Universidade Federal do Rio de Janeiro",
   "Universidade Federal de Minas Gerais",
+  "Universidade Federal do Maranhão",
   "Universidade Federal do Rio Grande do Sul",
   "Universidade Federal de Santa Catarina",
   "Universidade de Brasília",
