@@ -20,14 +20,15 @@
   --color-dark-border: #334155;
   --color-dark-border-subtle: #1E293B;
 
-  --font-sans: var(--font-dm-sans);
-  --font-heading: var(--font-plus-jakarta);
+  --font-sans: var(--font-cormorant-sc);
+  --font-heading: var(--font-cormorant-sc);
 }
 
 @layer base {
   body {
     background-color: var(--color-background);
     color: var(--color-text-main);
+    font-weight: 700;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 

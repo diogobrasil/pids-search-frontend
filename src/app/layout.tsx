@@ -1,19 +1,13 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, DM_Sans } from "next/font/google";
+import { Cormorant_SC } from "next/font/google";
 import Image from "next/image";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ToastProvider } from "@/components/ToastProvider";
 import "./globals.css";
 
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const cormorantSC = Cormorant_SC({
+  variable: "--font-cormorant-sc",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
@@ -51,7 +45,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${dmSans.className} ${plusJakarta.variable} ${dmSans.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
+        className={`${cormorantSC.className} ${cormorantSC.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
       >
         <ThemeProvider>
           <ToastProvider>

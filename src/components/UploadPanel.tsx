@@ -139,7 +139,7 @@ export function UploadPanel({ onUploadSuccess }: UploadPanelProps) {
                   }}
                   onFocus={() => setShowDropdown(true)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 dark:border-dark-border focus:ring-2 focus:ring-primary/20 dark:focus:ring-dark-primary/30 focus:border-primary dark:focus:border-dark-primary outline-none transition-all text-text-main dark:text-dark-text-main placeholder:text-slate-400 dark:placeholder:text-slate-500 bg-white dark:bg-dark-surface-raised"
-                  placeholder="Ex: Universidade Federal do Rio de Janeiro"
+                  placeholder="Ex: Universidade Federal do Maranhão"
                   autoComplete="off"
                 />
                 {showDropdown && filteredInstitutions.length > 0 && (
