@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Cormorant_SC } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import Image from "next/image";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ToastProvider } from "@/components/ToastProvider";
 import "./globals.css";
 
-const cormorantSC = Cormorant_SC({
-  variable: "--font-cormorant-sc",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +45,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${cormorantSC.className} ${cormorantSC.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
+        className={`${openSans.className} ${openSans.variable} bg-background dark:bg-dark-background text-text-main dark:text-dark-text-main flex flex-col min-h-screen transition-colors duration-300`}
       >
         <ThemeProvider>
           <ToastProvider>

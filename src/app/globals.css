@@ -20,8 +20,8 @@
   --color-dark-border: #334155;
   --color-dark-border-subtle: #1E293B;
 
-  --font-sans: var(--font-cormorant-sc);
-  --font-heading: var(--font-cormorant-sc);
+  --font-sans: var(--font-open-sans);
+  --font-heading: var(--font-open-sans);
 }
 
 @layer base {
